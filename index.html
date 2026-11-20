@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111714">
+  <meta name="description" content="A practice space for Livemix Pro Solo operation from Highlands Production.">
+  <title>Highlands Production — Livemix Pro Simulator</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/site.css">
+  <script src="./assets/site-config.js" defer></script>
+  <script src="./assets/site.js" defer></script>
+</head>
+<body>
+  <section class="gate" id="gate" aria-labelledby="gate-title">
+    <div class="gate-card">
+      <p class="brand">HIGHLANDS <span>PRODUCTION</span></p>
+      <div class="gate-mark" aria-hidden="true">HP<span> / TRAINING</span></div>
+      <p class="eyebrow">YOUR PRACTICE SPACE</p>
+      <h1 id="gate-title">Get ready.<br>Get hands-on.</h1>
+      <p class="muted">Enter your four-digit training PIN to open the Livemix Pro Simulator hub.</p>
+      <form id="pin-form">
+        <label for="pin">Training PIN</label>
+        <input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" autocomplete="off" required aria-describedby="pin-help pin-error">
+        <p id="pin-help" class="small muted">Use the four-digit PIN shared by your training team.</p>
+        <p id="pin-error" class="error" role="alert"></p>
+        <button class="button" type="submit">Unlock training</button>
+      </form>
+      <p class="gate-foot small muted">Independent browser training · No equipment required</p>
+      <noscript><p>JavaScript is required to use the training PIN screen.</p></noscript>
+    </div>
+  </section>
+
+  <div id="site" hidden>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="header wrap">
+      <a class="brand" href="#home" aria-label="Highlands Production home">HIGHLANDS <span>PRODUCTION</span></a>
+      <nav aria-label="Main navigation">
+        <a href="#training">Training topics</a>
+        <a href="#simulator">Simulator</a>
+        <button class="lock-button" id="lock" type="button">Lock page</button>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <section class="hero wrap" id="home" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="line" aria-hidden="true"></span> HIGHLANDS PRODUCTION / TRAINING</p>
+          <h1 id="hero-title" tabindex="-1">Find your flow.<br><span>Before the service.</span></h1>
+          <p class="intro">Your space to practice Livemix Pro Solo operation. Build familiarity with the controls, revisit the essentials, and take the time you need.</p>
+          <a class="button" href="#simulator">Explore the simulator</a>
+          <p class="small muted hero-note">Browser-based practice. At your pace.</p>
+        </div>
+        <aside class="practice-panel" aria-label="Training overview">
+          <div class="panel-top"><span>THE PRACTICE ROOM</span><span class="outline-label">SOLO</span></div>
+          <div class="panel-art" aria-hidden="true">
+            <div class="track"><i></i></div><div class="track"><i></i></div><div class="track"><i></i></div><div class="track"><i></i></div><div class="track"><i></i></div>
+          </div>
+          <div class="panel-bottom"><h2>Livemix Pro<br>Simulator</h2><p>Learn the controls.<br>Build your confidence.</p></div>
+          <p class="art-caption small">Illustrative training graphic</p>
+        </aside>
+      </section>
+
+      <section class="training wrap section" id="training" aria-labelledby="training-title">
+        <div class="section-heading"><div><p class="eyebrow">BUILD THE BASICS</p><h2 id="training-title">A little practice.<br>A more familiar workflow.</h2></div><p class="muted">Four areas to explore when the simulator arrives. Return to the topics that help you most.</p></div>
+        <div class="topics">
+          <article><span class="topic-symbol" aria-hidden="true">↳</span><h3>Loading a Mix</h3><p>Get familiar with recalling a saved mix as a starting point for practice.</p></article>
+          <article><span class="topic-symbol" aria-hidden="true">＋</span><h3>Saving a Mix</h3><p>Practice keeping a mix so you can return to your work in a later session.</p></article>
+          <article><span class="topic-symbol groups" aria-hidden="true">▥</span><h3>Working With Groups</h3><p>Explore how grouping fits into organizing and adjusting a personal mix.</p></article>
+          <article><span class="topic-symbol" aria-hidden="true">≈</span><h3>Adjust Reverb</h3><p>Become familiar with the reverb controls through visual practice.</p></article>
+        </div>
+      </section>
+
+      <section class="wrap section" id="simulator" aria-labelledby="simulator-title">
+        <div class="launch-panel">
+          <div><p class="eyebrow">YOUR NEXT PRACTICE SESSION</p><h2 id="simulator-title">Ready when you are.</h2><p class="muted" id="simulator-description">The training space is taking shape. The simulator will be available here once it has been added.</p></div>
+          <div class="launch-action"><span class="status" id="simulator-status">Simulator coming soon</span><a class="button" id="launch" hidden>Launch simulator</a><p class="small muted" id="launch-note">No installation needed.</p></div>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap footer"><p class="brand">HIGHLANDS <span>PRODUCTION</span></p><p>An independent browser training simulation. No audio processing or connection to physical equipment.</p></footer>
+  </div>
+</body>
+</html>

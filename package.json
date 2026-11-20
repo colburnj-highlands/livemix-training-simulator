@@ -1,0 +1,12 @@
+{
+  "name": "highlands-livemix-training",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone public training website for Highlands Production.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,27 @@
+# Local environment and credentials. Example files must contain placeholders only.
+.env
+.env.*
+!.env.example
+.aws/
+.ssh/
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# Installed dependencies and generated output.
+node_modules/
+dist/
+build/
+coverage/
+*.log
+
+# Machine-specific files and local tooling.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.codex/
+.agents/
