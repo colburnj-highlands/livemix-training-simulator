@@ -24,7 +24,6 @@ test('isolated build respects publication boundaries and relative links', async 
     for (const name of ['index.html', 'assets', 'scripts', 'simulator', '.nojekyll']) {
       await cp(path.join(root, name), path.join(isolated, name), { recursive: true });
     }
-    await writeFile(path.join(isolated, 'assets/site-config.js'), "window.TRAINING_CONFIG = { pin: '4700', simulatorEnabled: false };\n");
     await writeFile(path.join(isolated, '.env'), 'EXAMPLE=never-publish\n');
     await writeFile(path.join(isolated, 'README.md'), 'Development-only documentation');
     await writeFile(path.join(isolated, 'assets/.local-settings'), 'Local only');
@@ -32,8 +31,9 @@ test('isolated build respects publication boundaries and relative links', async 
     assert.equal(result.status, 0, 'Standalone build must succeed');
     const output = path.join(isolated, 'dist');
     const published = await files(output);
-    for (const item of ['index.html', 'assets/site.css', 'assets/site.js', 'assets/site-config.js', 'assets/favicon.svg', '.nojekyll']) assert.ok(published.includes(item));
-    assert.ok(published.every(item => item === 'index.html' || item === '.nojekyll' || item.startsWith('assets/')));
+    for (const item of ['index.html', 'simulator/index.html', 'assets/site.css', 'assets/site.js', 'assets/site-config.js', 'assets/branding/highlands-logo.svg', '.nojekyll']) assert.ok(published.includes(item));
+    assert.deepEqual(published.filter(item => item.endsWith('.html')), ['index.html', 'simulator/index.html']);
+    assert.ok(published.every(item => item === 'index.html' || item === '.nojekyll' || item.startsWith('assets/') || item === 'simulator/index.html'));
     assert.ok(published.every(item => !item.includes('README') && !item.includes('.local-settings')));
     const html = await readFile(path.join(output, 'index.html'), 'utf8');
     const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
@@ -48,10 +48,11 @@ test('isolated build respects publication boundaries and relative links', async 
         }
       }
     }
-    assert.match(html, /id="launch" hidden/);
+    assert.match(html, /Unlock simulator/);
+    assert.doesNotMatch(html, /id="site"|id="training"|id="launch"/);
     assert.doesNotMatch(html, /(?:src|href)="(?:https?:)?\/\//);
-    await writeFile(path.join(isolated, 'assets/site-config.js'), "window.TRAINING_CONFIG = { pin: '4700', simulatorEnabled: true };\n");
-    assert.notEqual(build(isolated).status, 0, 'Enabling without simulator must fail');
+    await rm(path.join(isolated, 'simulator/index.html'), { force: true });
+    assert.notEqual(build(isolated).status, 0, 'Missing simulator must fail');
     await mkdir(path.join(isolated, 'simulator'), { recursive: true });
     await writeFile(path.join(isolated, 'simulator/index.html'), '<!doctype html><title>Test delivery</title>');
     result = build(isolated);
@@ -65,5 +66,20 @@ test('isolated build respects publication boundaries and relative links', async 
     assert.notEqual(build(isolated).status, 0, 'Symlinks must fail');
   } finally {
     await rm(isolated, { recursive: true, force: true });
+  }
+});
+
+test('supplied simulator has self-contained assets and valid inline JavaScript', async () => {
+  const html = await readFile(path.join(root, 'simulator/index.html'), 'utf8');
+  for (const [, url] of html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)/gi)) {
+    assert.ok(url.startsWith('data:') || url.startsWith('#') || url === '../index.html', 'Simulator must not depend on external files');
+  }
+  assert.doesNotMatch(html, /(?:fetch|XMLHttpRequest|WebSocket|importScripts|sendBeacon)\s*\(/);
+  assert.doesNotMatch(html, /file:\/\/|\/Users\/|BEGIN [A-Z ]*PRIVATE KEY/);
+  const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+  assert.ok(scripts.length > 0);
+  for (const [, script] of scripts) {
+    const result = spawnSync(process.execPath, ['--input-type=module', '--check'], { input: script, encoding: 'utf8' });
+    assert.equal(result.status, 0, 'Embedded application JavaScript must parse');
   }
 });

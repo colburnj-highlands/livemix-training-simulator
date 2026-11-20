@@ -14,11 +14,11 @@ const output = path.join(root, 'dist');
 const context = { window: {} };
 vm.runInNewContext(await readFile(path.join(root, 'assets/site-config.js'), 'utf8'), context);
 const config = context.window.TRAINING_CONFIG;
-if (!/^[0-9]{4}$/.test(config?.pin) || typeof config.simulatorEnabled !== 'boolean') {
-  throw new Error('Set a four-digit string PIN and boolean simulatorEnabled in assets/site-config.js.');
+if (!/^[0-9]{4}$/.test(config?.pin)) {
+  throw new Error('Set a four-digit string PIN in assets/site-config.js.');
 }
-if (config.simulatorEnabled && !(await lstat(path.join(root, 'simulator/index.html')).catch(() => null))?.isFile()) {
-  throw new Error('Simulator enabled, but simulator/index.html is missing or is not a regular file.');
+if (!(await lstat(path.join(root, 'simulator/index.html')).catch(() => null))?.isFile()) {
+  throw new Error('simulator/index.html is missing or is not a regular file.');
 }
 
 const allowed = new Set(['.html', '.css', '.js', '.mjs', '.json', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.ico', '.woff', '.woff2', '.ttf', '.otf', '.mp3', '.wav', '.ogg', '.mp4', '.webm', '.wasm']);
@@ -45,6 +45,6 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await copyPublic('index.html');
 await copyPublic('assets');
-if (config.simulatorEnabled) await copyPublic('simulator');
+await copyPublic('simulator');
 await copyFile(path.join(root, '.nojekyll'), path.join(output, '.nojekyll'));
-console.log(`Website built in dist/. Simulator ${config.simulatorEnabled ? 'enabled' : 'not yet supplied'}.`);
+console.log('Website built in dist/: lock screen and simulator.');
